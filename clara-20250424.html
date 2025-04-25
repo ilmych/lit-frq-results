@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clara's FRQ Results</title>
+    <style>
+        :root {
+            --primary: #3a6ea5;
+            --primary-light: #c0d6e4;
+            --primary-dark: #1e3c5a;
+            --accent: #ff7d49;
+            --success: #45ac45;
+            --warning: #f9a94a;
+            --danger: #e05353;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        
+        .question-header {
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .question-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .score-badge {
+            background: white;
+            color: var(--primary-dark);
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .question-body {
+            padding: 20px;
+        }
+        
+        .summary-section {
+            background-color: var(--primary-light);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-section h3 {
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+        }
+        
+        .breakdown-toggle {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 20px;
+            transition: background-color 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .breakdown-toggle:hover {
+            background-color: #b0cedf;
+        }
+        
+        .breakdown-toggle .icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .breakdown-toggle[aria-expanded="true"] .icon {
+            transform: rotate(180deg);
+        }
+        
+        .breakdown-content {
+            display: none;
+        }
+        
+        .breakdown-content.active {
+            display: block;
+        }
+        
+        .criteria-section {
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--gray-light);
+            padding-bottom: 20px;
+        }
+        
+        .criteria-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .criteria-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .criteria-header h4 {
+            color: var(--primary-dark);
+            font-size: 1.2rem;
+        }
+        
+        .criteria-score {
+            font-weight: bold;
+        }
+        
+        .full-score {
+            color: var(--success);
+        }
+        
+        .partial-score {
+            color: var(--warning);
+        }
+        
+        .zero-score {
+            color: var(--danger);
+        }
+        
+        .comment-section {
+            background-color: var(--gray-light);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .comment-section p {
+            margin-bottom: 10px;
+        }
+        
+        .comment-section p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .improvement-section {
+            background-color: #fff8ee;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .improvement-section h5 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        ul {
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .question-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .score-badge {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Wait for DOM to be fully loaded before adding event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all toggle buttons
+            const toggleButtons = document.querySelectorAll('.breakdown-toggle');
+            
+            // Add click event listener to each button
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Get current state
+                    const expanded = this.getAttribute('aria-expanded') === 'true';
+                    
+                    // Update button state
+                    this.setAttribute('aria-expanded', !expanded);
+                    
+                    // Get target content
+                    const targetId = this.getAttribute('aria-controls');
+                    const targetContent = document.getElementById(targetId);
+                    
+                    // Toggle active class to show/hide content
+                    if (expanded) {
+                        targetContent.classList.remove('active');
+                    } else {
+                        targetContent.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+    <div class="container">
+        <header>
+            <h1>Clara's FRQ Results</h1>
+            <div class="subtitle">AP Literature and Composition - 2025-04-24</div>
+        </header>
+        
+        <!-- Question 1 -->
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Question 1 - 'Poetry Analysis'</h2>
+                <div class="score-badge">
+                    <span>Score: 6</span>
+                </div>
+            </div>
+            <div class="question-body">
+                <div class="summary-section">
+                    <h3>Summary</h3>
+                    <p>The essay presents a strong thesis identifying forgetfulness as paradoxical and universally experienced, with sophisticated analysis of literary techniques and contradictions throughout the poem. To improve, focus on explicitly connecting poetic elements (tone, imagery, structure) to the thesis, refine thesis wording for clarity, and deepen analysis of how the poem's form reinforces its themes. Additionally, explore the emotional tone created by the contradictions and develop more connections between textual analysis and broader human significance.</p>
+                </div>
+                
+                <button class="breakdown-toggle" aria-expanded="false" aria-controls="q1-breakdown">
+                    View Detailed Breakdown
+                    <span class="icon">▼</span>
+                </button>
+                
+                <div id="q1-breakdown" class="breakdown-content">
+                    <div class="criteria-section">
+                        <div class="criteria-header">
+                            <h4>Thesis</h4>
+                            <div class="criteria-score full-score">Score: 1/1</div>
+                        </div>
+                        
+                        <div class="comment-section">
+                            <p><em>Commentary:</em></p>
+                            <p>The essay presents a defensible thesis in the first paragraph: "In the poem, the speaker argues that forgetfulness is a phenomenon that the universe will never understand, but will always experience together by illustrating forgetfulness as an inherently paradoxical idea that everybody mutually goes through." This thesis responds directly to the prompt by offering a specific interpretation of the speaker's views on forgetfulness. It goes beyond merely restating the prompt by identifying the paradoxical nature of forgetfulness as a central theme and asserting that the poem suggests this paradox is a universal experience that connects humanity. The thesis presents an arguable claim that will be supported throughout the essay.</p>
+                        </div>
+                        
+                        <div class="improvement-section">
+                            <h5>Improvement suggestions:</h5>
+                            <ul><li>While the thesis successfully identifies the paradoxical nature of forgetfulness, it could more explicitly address how poetic elements (tone, imagery, sentence structure) help convey this view, as specifically requested in the prompt</li><li>Consider refining the wording for clarity - the current phrasing "by illustrating forgetfulness as..." grammatically suggests the speaker is doing the illustrating, when you mean to say the poem illustrates this concept</li><li>The thesis could more clearly distinguish between the two main claims: (1) forgetfulness is paradoxical/incomprehensible and (2) forgetfulness is universally experienced</li></ul>
+                        </div>
+                    </div>
+                    
+                    <div class="criteria-section">
+                        <div class="criteria-header">
+                            <h4>Evidence & Reasoning</h4>
+                            <div class="criteria-score full-score">Score: 4/4</div>
+                        </div>
+                        
+                        <div class="comment-section">
+                            <p><em>Commentary:</em></p>
+                            <p>This essay successfully demonstrates a sophisticated understanding of the poem's complexity through consistently integrated evidence and commentary. The analysis builds a clear line of reasoning about how the poem presents forgetfulness as paradoxical and universally experienced. The student effectively analyzes multiple literary techniques with specific examples and explains their significance to the poem's meaning.</p><p>The essay effectively examines the use of similes in the opening paragraph, particularly focusing on the juxtaposition created by describing forgetfulness as 'a song that, freed from beat and measure, wanders.' The student explains how this contradiction 'forces the reader to pause and question themselves,' establishing forgetfulness as inherently paradoxical. The analysis of metaphors and juxtaposition in the second paragraph further supports this line of reasoning, examining how forgetfulness is presented as both 'an old house in a forest,—or a child' (old vs. young) and 'white,—white as a blasted tree' (white vs. black). Each piece of evidence is consistently connected to the central argument about forgetfulness being inherently contradictory.</p><p>The analysis of the final line, 'I can remember much forgetfulness,' is particularly strong, as the student explains how this paradoxical statement serves to 'connect everybody at the end of the poem through the idea of universal experiences.' This creates a cohesive connection between the poem's use of contradictions and the universal nature of forgetfulness.</p>
+                        </div>
+                        
+                        <div class="improvement-section">
+                            <h5>Improvement suggestions:</h5>
+                            <ul><li>Consider analyzing how the form and structure of the poem itself contributes to the theme of forgetfulness—are there patterns in line breaks, stanza structure, or rhythm that mirror the wandering nature of forgetfulness?</li><li>The essay could strengthen its analysis by examining the significance of specific images like 'rain at night' or 'a bird that coasts the wind unwearyingly' rather than focusing primarily on oppositional pairings.</li><li>While the essay effectively identifies paradoxical elements, it could explore the emotional tone created by these contradictions more deeply—does the poet seem to find comfort, frustration, or acceptance in the paradoxical nature of forgetfulness?</li><li>The conclusion could more explicitly connect the analysis of literary techniques to the broader philosophical implications of the poem's portrayal of memory and forgetfulness.</li></ul>
+                        </div>
+                    </div>
+                    
+                    <div class="criteria-section">
+                        <div class="criteria-header">
+                            <h4>Sophistication</h4>
+                            <div class="criteria-score full-score">Score: 1/1</div>
+                        </div>
+                        
+                        <div class="comment-section">
+                            <p><em>Commentary:</em></p>
+                            <p>This essay demonstrates sophistication of thought through its exploration of paradox and juxtaposition as central to understanding the poem's treatment of forgetfulness. The analysis develops a complex literary argument by identifying the inherently contradictory nature of forgetfulness as the poem's core concern. The student's thesis effectively establishes this complex perspective: the poem portrays 'forgetfulness as an inherently paradoxical idea that everybody mutually goes through.'</p><p>The essay skillfully analyzes how the poem builds understanding through contradiction, noting how the opening similes present ideas that 'seemingly cannot be true at the same time.' By connecting these contradictions to the reader's experience ('forces the reader to pause and question themselves, almost as though they had forgotten what they just read'), the essay demonstrates sophisticated understanding of how poetic devices affect readers.</p><p>Particularly impressive is the essay's analysis of the metaphorical juxtapositions in the second paragraph, where it identifies how the poem pairs opposites ('both old and young' and 'white vs black') to represent the paradoxical nature of forgetfulness. The student insightfully connects these contradictions to universal experience, arguing that 'this confusion about forgetfulness extends beyond just the reader and to the greater universe.'</p><p>The essay's final paragraph demonstrates sophisticated thinking by moving beyond mere analysis of techniques to explore the implications of the poem's paradoxes for human connection: 'by going through it together, we are able to find solace in community.' This represents a mature analytical move that connects textual analysis to broader human significance.</p>
+                        </div>
+                        
+                        <div class="improvement-section">
+                            <h5>Improvement suggestions:</h5>
+                            <ul><li>The essay could strengthen its sophisticated analysis by more explicitly discussing how the poem's form (its list-like quality and repetition of 'Forgetfulness is') reinforces its thematic exploration of paradox.</li><li>While the student effectively analyzes the contradictions in the poem, they could develop a more nuanced exploration of how the poem's tone shifts or evolves across stanzas, particularly how the final line's personal voice ('I can remember much forgetfulness') reframes the preceding abstract descriptions.</li><li>The analysis could be enriched by considering potential cultural or philosophical dimensions of how we conceptualize memory and forgetfulness, connecting the poem's paradoxes to broader intellectual traditions.</li><li>Though the essay mentions 'universal experiences,' it could develop more sophisticated connections between the poem's treatment of forgetfulness and specific aspects of human psychology or shared emotional experiences.</li></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Question 2 -->
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Question 2 - 'Prose Analysis'</h2>
+                <div class="score-badge">
+                    <span>Score: 3</span>
+                </div>
+            </div>
+            <div class="question-body">
+                <div class="summary-section">
+                    <h3>Summary</h3>
+                    <p>The essay presents a clear thesis about Wharton's portrayal of social change but needs more specific analysis of how literary devices like diction and juxtaposition demonstrate changing values. Instead of simply identifying literary elements, develop a deeper analysis that connects specific word choices and the mother's contradictory behavior to broader social changes. Strengthen your argument by exploring the narrative complexities including generational tensions, moral hypocrisy, and the narrator's perspective that mediates between old and new social values.</p>
+                </div>
+                
+                <button class="breakdown-toggle" aria-expanded="false" aria-controls="q2-breakdown">
+                    View Detailed Breakdown
+                    <span class="icon">▼</span>
+                </button>
+                
+                <div id="q2-breakdown" class="breakdown-content">
+                    <div class="criteria-section">
+                        <div class="criteria-header">
+                            <h4>Thesis</h4>
+                            <div class="criteria-score full-score">Score: 1/1</div>
+                        </div>
+                        
+                        <div class="comment-section">
+                            <p><em>Commentary:</em></p>
+                            <p>The thesis statement "In 'New Year's Day' Wharton shows that social values and customs will inevitably change as time passes by contrasting the old and the new" effectively responds to the prompt's question about how Wharton shows changes in social values and customs. The thesis identifies a clear interpretive stance (that Wharton demonstrates the inevitability of social change) and mentions a specific literary technique (contrasting old and new) that will be analyzed in the essay. This provides a defensible interpretation that directly addresses the prompt's request to analyze literary devices used to show changing social values.</p>
+                        </div>
+                        
+                        <div class="improvement-section">
+                            <h5>Improvement suggestions:</h5>
+                            <ul><li>Consider specifying which social values or customs are changing to make the thesis more precise</li><li>Could strengthen by mentioning additional literary devices beyond contrast that will be analyzed (the essay discusses diction, tone, and juxtaposition)</li><li>Add more specificity about how the contrast between old and new relates to Wharton's purpose or message about society</li></ul>
+                        </div>
+                    </div>
+                    
+                    <div class="criteria-section">
+                        <div class="criteria-header">
+                            <h4>Evidence & Reasoning</h4>
+                            <div class="criteria-score partial-score">Score: 2/4</div>
+                        </div>
+                        
+                        <div class="comment-section">
+                            <p><em>Commentary:</em></p>
+                            <p>This essay includes some specific textual evidence and attempts to analyze literary devices, but the commentary often remains superficial and fails to establish a coherent line of reasoning about how Wharton portrays changing social values and customs. The essay identifies two literary devices (diction and juxtaposition) but doesn't fully develop how they specifically contribute to showing social change. While the essay quotes phrases like "luxuriously warmed" and "searchingly illuminated" to discuss diction, the commentary oversimplifies how these word choices demonstrate changing social values, stating only that they "create a sense of class and wealth." Similarly, the discussion of juxtaposition identifies the mother's contradictory behavior but doesn't thoroughly explain how this specific literary technique reflects broader social change. The commentary generally remains at a surface level, making claims without fully developing the connection between the evidence and the thesis about inevitable social change.</p>
+                        </div>
+                        
+                        <div class="improvement-section">
+                            <h5>Improvement suggestions:</h5>
+                            <ul><li>Develop a clearer line of reasoning about <em>how</em> changing social values are portrayed rather than simply stating that change occurs</li><li>Analyze specific word choices more thoroughly by explaining exactly how they reflect changing social values (e.g., how does "luxuriously" specifically relate to changing attitudes about wealth?)</li><li>Connect the mother's contradictory behavior more explicitly to broader social values and customs rather than using it as a general symbol of change</li><li>Analyze additional literary elements from the passage that contribute to portraying change, such as narrative structure, characterization, or irony</li><li>Include more specific textual evidence about the attitudes toward social customs like New Year's Day celebrations and explain how they demonstrate changing values</li><li>Analyze the narrative voice and how it creates perspective on these changing customs</li></ul>
+                        </div>
+                    </div>
+                    
+                    <div class="criteria-section">
+                        <div class="criteria-header">
+                            <h4>Sophistication</h4>
+                            <div class="criteria-score full-score">Score: 0/1</div>
+                        </div>
+                        
+                        <div class="comment-section">
+                            <p><em>Commentary:</em></p>
+                            <p>While the essay demonstrates basic understanding of literary elements used in the passage, it lacks the sophistication of thought necessary for the higher score. The analysis is primarily organized around identifying literary devices (diction and juxtaposition) rather than developing a complex literary argument about how these elements work together to create meaning. The thesis identifies 'contrasting the old and the new' but fails to explore the deeper cultural and psychological complexities embedded in Wharton's narrative.</p><p>The essay makes some valid observations about Wharton's technique of contrasting descriptions of old and new New York, and briefly notes the symbol of the mother knitting a baby blanket while speaking harshly. However, these observations remain underdeveloped. For instance, the discussion of the mother's contradictory behavior could have been expanded to analyze how this characterization contributes to Wharton's portrayal of societal hypocrisy or changing moral standards.</p><p>The analysis misses opportunities to explore significant narrative complexities, such as the generational tensions, the narrator's complex relationship with old New York social codes, or Wharton's subtle critique of society's preoccupation with scandal. The essay doesn't engage with the sophisticated narrative voice that simultaneously distances itself from and is embedded within the social structures it describes.</p>
+                        </div>
+                        
+                        <div class="improvement-section">
+                            <h5>Improvement suggestions:</h5>
+                            <ul><li>Develop a more complex thesis that addresses not just the contrast between old and new, but the psychological, moral, or social complexities this contrast reveals in Wharton's narrative</li><li>Analyze how the narrative structure—particularly the shift from dialogue to memory to social commentary—contributes to Wharton's exploration of changing social values</li><li>Explore the significance of the narrator's perspective and how their position mediates between old and new social values</li><li>Examine how Wharton uses irony and understatement to critique both past and present social customs</li><li>Analyze the complex relationship between public scandal, private morality, and societal judgment in the passage</li><li>Connect textual details more explicitly to broader themes about social change, moral hypocrisy, or the evolution of social customs</li><li>Consider the passage's ambivalent tone toward both old standards of propriety and newer, more permissive attitudes</li></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Question 3 -->
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Question 3 - 'Literary Argument'</h2>
+                <div class="score-badge">
+                    <span>Score: 5</span>
+                </div>
+            </div>
+            <div class="question-body">
+                <div class="summary-section">
+                    <h3>Summary</h3>
+                    <p>The essay successfully develops a clear thesis about Gatsby's failed identity search through wealth as a commentary on the unattainability of the American Dream, supported by well-chosen textual evidence. To improve, focus on developing a more sophisticated analysis by exploring the complexities of Gatsby's identity transformation (both its successes and failures), examining how social class intersects with identity formation, and analyzing specific symbols that connect to American mythology. Additionally, strengthen the thesis by explicitly connecting Gatsby's story to the novel's broader critique of American society beyond just mentioning the American Dream.</p>
+                </div>
+                
+                <button class="breakdown-toggle" aria-expanded="false" aria-controls="q3-breakdown">
+                    View Detailed Breakdown
+                    <span class="icon">▼</span>
+                </button>
+                
+                <div id="q3-breakdown" class="breakdown-content">
+                    <div class="criteria-section">
+                        <div class="criteria-header">
+                            <h4>Thesis</h4>
+                            <div class="criteria-score full-score">Score: 1/1</div>
+                        </div>
+                        
+                        <div class="comment-section">
+                            <p><em>Commentary:</em></p>
+                            <p>The thesis statement appears in the first paragraph and reads: "In The Great Gatsby, Gatsby's search for personal identity through money is ultimately unsuccessful, which contributes to the interpretation of the book as a tale of the unattainability of the American dream." This thesis effectively responds to the prompt by identifying a specific character (Gatsby) engaged in a search (for personal identity through money), assessing the extent of success (ultimately unsuccessful), and analyzing how this contributes to the meaning of the work as a whole (interpretation of the book as a tale of the unattainability of the American dream). The thesis makes a defensible claim that could be argued with textual evidence, as demonstrated in the subsequent paragraphs.</p>
+                        </div>
+                        
+                        <div class="improvement-section">
+                            <h5>Improvement suggestions:</h5>
+                            <ul><li>Could strengthen by briefly mentioning what motivates Gatsby's search for identity (his love for Daisy), which is addressed later in the essay</li><li>Consider including a more specific explanation of how this failed search connects to the novel's critique of American society, rather than just mentioning the American dream</li><li>While strong overall, the thesis could acknowledge the complexity of Gatsby's transformation - he does partially succeed in creating a new persona, even if it ultimately fails</li></ul>
+                        </div>
+                    </div>
+                    
+                    <div class="criteria-section">
+                        <div class="criteria-header">
+                            <h4>Evidence & Reasoning</h4>
+                            <div class="criteria-score full-score">Score: 4/4</div>
+                        </div>
+                        
+                        <div class="comment-section">
+                            <p><em>Commentary:</em></p>
+                            <p>This essay effectively provides specific evidence from The Great Gatsby to support all claims in its line of reasoning about Gatsby's failed search for identity through wealth and its connection to the American Dream. The response incorporates well-chosen evidence such as Gatsby's name change, his illegal activities selling bootleg alcohol, his desperate plea to Daisy ('Say you never loved him!'), and his ultimate downfall. The essay consistently explains how this evidence supports its argument that the American Dream is an illusion. The commentary effectively connects Gatsby's personal journey to broader themes, noting how 'by changing his name and compromising his integrity, Gatsby loses all the aspects of himself that make him a unique person.' The third paragraph offers particularly strong analysis by connecting Gatsby's experience to historical context: 'After a decade of lavish lifestyles, the people were thrust into a time of economic uncertainty.' This effectively ties Gatsby's individual failure to the collective disillusionment with the American Dream. The essay maintains a clear line of reasoning throughout, showing how Gatsby's search for identity through wealth parallels America's own complex relationship with materialism and success.</p>
+                        </div>
+                        
+                        <div class="improvement-section">
+                            <h5>Improvement suggestions:</h5>
+                            <ul><li>While already strong, the essay could further develop the connection between Gatsby's criminal activities and his identity crisis by exploring how his moral compromises reflect the corrupt nature of the American Dream itself.</li><li>Consider incorporating additional textual evidence showing Gatsby's calculated self-reinvention, such as his practice of refined speech patterns or his carefully orchestrated parties.</li><li>The analysis of the climactic scene with Daisy is effective but could be expanded to more explicitly analyze how her rejection represents the ultimate failure of material wealth to secure emotional fulfillment.</li><li>The historical context provided in paragraph three could be strengthened by more specific connections to elements in the novel that symbolize the excesses of the 1920s.</li><li>The conclusion effectively summarizes the essay's argument but could more explicitly connect back to specific evidence presented earlier to reinforce the line of reasoning.</li></ul>
+                        </div>
+                    </div>
+                    
+                    <div class="criteria-section">
+                        <div class="criteria-header">
+                            <h4>Sophistication</h4>
+                            <div class="criteria-score zero-score">Score: 0/1</div>
+                        </div>
+                        
+                        <div class="comment-section">
+                            <p><em>Commentary:</em></p>
+                            <p>While the essay offers a clear thesis about Gatsby's unsuccessful search for identity through wealth as a commentary on the unattainability of the American Dream, it lacks the level of sophistication needed to earn the complexity point. The essay provides a straightforward reading of Gatsby's journey without exploring the nuanced complexities of identity formation, class dynamics, or the novel's layered critique of American society. The analysis recognizes basic connections between Gatsby's personal journey and the novel's themes but doesn't develop these into a complex literary argument that engages with the work's deeper implications or ambiguities. For example, while the essay mentions Gatsby's name change and compromised integrity, it doesn't explore the complexities of self-creation and performance central to the novel or analyze the tensions between different aspects of the American Dream that Fitzgerald critiques. The final paragraph offers a somewhat reductive 'cautionary tale' reading that oversimplifies the novel's rich exploration of American ideals, illusion, and reality.</p>
+                        </div>
+                        
+                        <div class="improvement-section">
+                            <h5>Improvement suggestions:</h5>
+                            <ul><li>Explore the complex and contradictory nature of Gatsby's identity quest by analyzing how his reinvention is both genuine and artificial, idealistic and corrupt</li><li>Analyze how social class intersects with identity formation in the novel, considering how Gatsby's outsider status shapes his pursuit of wealth and Daisy</li><li>Examine how Fitzgerald's use of narrative perspective (Nick's narration) complicates our understanding of Gatsby's search for meaning</li><li>Consider how Gatsby's tragic end relates to larger questions about the American Dream's promises and limitations in the post-WWI era</li><li>Analyze specific language and symbolism (green light, East/West divide, etc.) to develop a more nuanced argument about identity and American mythology</li><li>Expand beyond the straightforward reading of the novel as a 'cautionary tale' to explore its ambivalent portrayal of idealism and disillusionment</li></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
