@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRQ Results Portal</title>
+    <style>
+        :root {
+            --primary: #3a6ea5;
+            --primary-light: #c0d6e4;
+            --primary-dark: #1e3c5a;
+            --accent: #ff7d49;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 50px 20px;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .link-button {
+            display: block;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            margin: 20px auto;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            width: 80%;
+            max-width: 400px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background-color 0.3s;
+        }
+
+        .link-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>FRQ Results</h1>
+            <p>Select a student to view their detailed feedback</p>
+        </header>
+
+        <a href="clara-20250424.html" class="link-button">Clara's FRQ Results</a>
+        <a href="madeleine-20250424.html" class="link-button">Madeleine's FRQ Results</a>
+
+        <footer>
+            &copy; 2025 AP Literature and Composition
+        </footer>
+    </div>
+</body>
+</html>
