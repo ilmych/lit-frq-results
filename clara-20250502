@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clara's FRQ Results</title>
+    <style>
+        :root {
+            --primary: #3a6ea5;
+            --primary-light: #c0d6e4;
+            --primary-dark: #1e3c5a;
+            --accent: #ff7d49;
+            --success: #45ac45;
+            --warning: #f9a94a;
+            --danger: #e05353;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        
+        .question-header {
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .question-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .score-badge {
+            background: white;
+            color: var(--primary-dark);
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .question-body {
+            padding: 20px;
+        }
+        
+        .summary-section {
+            background-color: var(--primary-light);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-section h3 {
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+        }
+        
+        .breakdown-toggle {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 20px;
+            transition: background-color 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .breakdown-toggle:hover {
+            background-color: #b0cedf;
+        }
+        
+        .breakdown-toggle .icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .breakdown-toggle[aria-expanded="true"] .icon {
+            transform: rotate(180deg);
+        }
+        
+        .breakdown-content {
+            display: none;
+        }
+        
+        .breakdown-content.active {
+            display: block;
+        }
+        
+        .criteria-section {
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--gray-light);
+            padding-bottom: 20px;
+        }
+        
+        .criteria-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .criteria-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .criteria-header h4 {
+            color: var(--primary-dark);
+            font-size: 1.2rem;
+        }
+        
+        .criteria-score {
+            font-weight: bold;
+        }
+        
+        .full-score {
+            color: var(--success);
+        }
+        
+        .partial-score {
+            color: var(--warning);
+        }
+        
+        .zero-score {
+            color: var(--danger);
+        }
+        
+        .comment-section {
+            background-color: var(--gray-light);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .comment-section p {
+            margin-bottom: 10px;
+        }
+        
+        .comment-section p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .improvement-section {
+            background-color: #fff8ee;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .improvement-section h5 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        ul {
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .question-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .score-badge {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Wait for DOM to be fully loaded before adding event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all toggle buttons
+            const toggleButtons = document.querySelectorAll('.breakdown-toggle');
+            
+            // Add click event listener to each button
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Get current state
+                    const expanded = this.getAttribute('aria-expanded') === 'true';
+                    
+                    // Update button state
+                    this.setAttribute('aria-expanded', !expanded);
+                    
+                    // Get target content
+                    const targetId = this.getAttribute('aria-controls');
+                    const targetContent = document.getElementById(targetId);
+                    
+                    // Toggle active class to show/hide content
+                    if (expanded) {
+                        targetContent.classList.remove('active');
+                    } else {
+                        targetContent.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+    <div class="container">
+        <header>
+            <h1>Clara's FRQ Results</h1>
+            <div class="subtitle">AP Literature and Composition - 2025-05-02</div>
+        </header>
+        
+        <!-- Question 1 -->
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Question 1 - 'Poetry Analysis'</h2>
+                <div class="score-badge">
+                    <span>Score: 4</span>
+                </div>
+            </div>
+            <div class="question-body">
+                <div class="summary-section">
+                    <h3>Summary</h3>
+                    <p>The essay presents a clear thesis about the poem's view on love, effectively using evidence and literary elements to support its argument. However, the analysis needs stronger connections between the evidence and the thesis statement about 'failing love being better than no love,' particularly in explaining how specific literary elements support this claim. To improve, develop more nuanced commentary that addresses the poem's tensions and ambiguities, analyze how multiple poetic devices work together rather than in isolation, and create a more sophisticated exploration of the wife's complex feelings toward marriage.</p>
+                </div>
+                
+                <button class="breakdown-toggle" aria-expanded="false" aria-controls="q1-breakdown">
+                    View Detailed Breakdown
+                    <span class="icon">▼</span>
+                </button>
+                
+                <div id="q1-breakdown" class="breakdown-content">
+                    <div class="criteria-section">
+                        <div class="criteria-header">
+                            <h4>Thesis</h4>
+                            <div class="criteria-score full-score">Score: 1/1</div>
+                        </div>
+                        
+                        <div class="comment-section">
+                            <p><em>Commentary:</em></p>
+                            <p>The thesis statement "In 'The Wife Speaks', Elizabeth Stoddard argues that a failing attempt at love that lacks real depth is better than no love at all by illustrating the wife's ideal view of love alongside the sacrifices she is willing to make" effectively responds to the prompt. It presents a defensible interpretation of Stoddard's complex thoughts about marriage as expressed in the poem. The thesis goes beyond merely restating the prompt and offers a specific claim about how Stoddard portrays marriage - as something worth pursuing despite its imperfections. It also identifies two specific elements that will be analyzed (the wife's idealized view of love and her willingness to sacrifice), providing a clear framework for the essay's argument.</p>
+                        </div>
+                        
+                        <div class="improvement-section">
+                            <h5>Improvement suggestions:</h5>
+                            <ul><li>Could be strengthened by more explicitly connecting to specific literary elements mentioned in the prompt</li><li>Might benefit from clarifying whether the thesis is arguing that this is Stoddard's personal belief or merely the perspective conveyed through the poem's speaker</li><li>Consider addressing the tension between idealism and reality that appears in the poem, which could add nuance to the argument</li></ul>
+                        </div>
+                    </div>
+                    
+                    <div class="criteria-section">
+                        <div class="criteria-header">
+                            <h4>Evidence & Reasoning</h4>
+                            <div class="criteria-score partial-score">Score: 3/4</div>
+                        </div>
+                        
+                        <div class="comment-section">
+                            <p><em>Commentary:</em></p>
+                            <p>The student essay provides specific evidence from the poem and develops a line of reasoning that centers on the wife's idealized view of love and her willingness to sacrifice. The essay effectively analyzes how literary elements convey complex thoughts about marriage in Stoddard's poem, though the commentary isn't always fully consistent in connecting evidence to the line of reasoning.</p><p>In the first body paragraph, the essay presents specific evidence of metaphor ('great temple of the double soul') and juxtaposition ('joys of birth, and the woe of death') to demonstrate the wife's idealized view of love. The commentary explains how the temple metaphor elevates love to something sacred and unattainable, showing how 'the wife demonstrates to the reader just how idyllically she imagines love.' The analysis of juxtaposition effectively explains how opposing concepts illustrate the wife's dedication and idealism about love persevering 'through timeless and opposing concepts.'</p><p>The second body paragraph provides clear evidence of imagery, juxtaposition, and symbolism to illustrate the wife's willingness to sacrifice. The student analyzes the imagery of 'life's desert' and 'Egyptian sands' juxtaposed with 'a future which contains no past' to show the magnitude of sacrifice. The commentary explains how these elements show the wife is 'willing to erase centuries of history' symbolically to 'clean the slate' in her relationship.</p><p>The essay explains how at least one literary element contributes to the poem's meaning, particularly the analysis of metaphor, juxtaposition, and imagery. However, the commentary doesn't consistently connect all evidence back to the thesis about 'a failing attempt at love that lacks real depth is better than no love at all.' The final paragraph attempts to synthesize the analysis but doesn't fully tie the literary elements back to this specific claim about the value of attempted love.</p>
+                        </div>
+                        
+                        <div class="improvement-section">
+                            <h5>Improvement suggestions:</h5>
+                            <ul><li>Strengthen the connection between your evidence and your thesis statement. While you analyze literary elements effectively, more explicitly explain how they support your specific claim that 'a failing attempt at love that lacks real depth is better than no love at all.'</li><li>Develop more consistent commentary that connects each piece of evidence back to your line of reasoning. For example, when discussing the 'Egyptian desert' imagery, clarify how this specifically supports the idea that attempting love is better than not trying at all.</li><li>Analyze more directly how the wife's idealism and sacrifice relate to the 'failing attempt at love' mentioned in your thesis. Does the poem suggest her love lacks depth, as your thesis claims? Provide textual evidence that specifically supports this aspect of your interpretation.</li><li>In your conclusion, focus less on generalizations about love throughout history and more on synthesizing how the specific literary elements you've analyzed prove your thesis about the value of attempted love despite its shortcomings.</li><li>Consider adding analysis of the question posed at the end of the poem ('Wait for a future which contains no past?') and how this relates to your argument about the value of attempting love even if it's imperfect.</li></ul>
+                        </div>
+                    </div>
+                    
+                    <div class="criteria-section">
+                        <div class="criteria-header">
+                            <h4>Sophistication</h4>
+                            <div class="criteria-score zero-score">Score: 0/1</div>
+                        </div>
+                        
+                        <div class="comment-section">
+                            <p><em>Commentary:</em></p>
+                            <p>While the essay makes some promising analytical moves, it falls short of sophisticated literary analysis. The thesis statement establishes a basic interpretive framework ('that a failing attempt at love that lacks real depth is better than no love at all'), but this framework isn't fully developed through a complex literary argument. The paragraphs identify literary techniques (metaphor, juxtaposition, imagery, symbolism) in isolation rather than analyzing how they work together to create the poem's complex effects. The essay doesn't fully explore the tensions and ambiguities in the wife's perspective, particularly regarding the questions posed in the poem and what they reveal about her complex feelings toward marriage. The final paragraph attempts to connect the poem to broader human themes but does so in a relatively simplistic way without exploring deeper implications or contextualizing the poem's portrayal of marriage within its historical moment.</p>
+                        </div>
+                        
+                        <div class="improvement-section">
+                            <h5>Improvement suggestions:</h5>
+                            <ul><li>Develop a more nuanced thesis that directly addresses the complex and potentially contradictory thoughts the wife expresses about her marriage, including her ambivalence and the questions she poses to her husband</li><li>Analyze how multiple poetic devices work together rather than examining them in isolation - for example, how metaphor and imagery combine to convey the wife's complicated feelings</li><li>Explore the tensions in the poem between idealism and reality, between past aspirations and present circumstances</li><li>Consider how the structure of the poem as a question to the husband creates meaning, and how the conditional tense ('would you') creates complexity</li><li>Analyze the poem's treatment of time and memory and how they inform the wife's perspective on her marriage</li><li>Connect the poem's treatment of marriage to its historical context in the late 19th century for a more contextualized analysis</li><li>Develop the analysis of how the poem portrays the sacrifices within marriage and the 'immolation to the marriage bond' with greater depth</li></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Question 2 -->
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Question 2 - 'Prose Analysis'</h2>
+                <div class="score-badge">
+                    <span>Score: 5</span>
+                </div>
+            </div>
+            <div class="question-body">
+                <div class="summary-section">
+                    <h3>Summary</h3>
+                    <p>The essay successfully presents a defensible thesis about Kincaid's portrayal of homesickness and effectively analyzes literary elements like diction, syntax, simile, and imagery. To improve, incorporate additional literary elements beyond contrast in your thesis, develop more nuanced analysis of the narrator's complex psychological state rather than simple binary feelings, and deepen your exploration of how specific techniques (especially the water/bank metaphor) reveal the cultural and emotional complexities of displacement.</p>
+                </div>
+                
+                <button class="breakdown-toggle" aria-expanded="false" aria-controls="q2-breakdown">
+                    View Detailed Breakdown
+                    <span class="icon">▼</span>
+                </button>
+                
+                <div id="q2-breakdown" class="breakdown-content">
+                    <div class="criteria-section">
+                        <div class="criteria-header">
+                            <h4>Thesis</h4>
+                            <div class="criteria-score full-score">Score: 1/1</div>
+                        </div>
+                        
+                        <div class="comment-section">
+                            <p><em>Commentary:</em></p>
+                            <p>The student provides a defensible thesis in the opening sentence: \"In the excerpt from the novel Lucy, Kincaid argues that no matter how much you dislike your home, you will always want to go back by contrasting the improvement of the narrator's situation with their internal feelings of homesickness.\" This thesis directly responds to the prompt by presenting an interpretation of how Kincaid portrays the complexity of the narrator's new situation. It identifies both the author's argument (about homesickness despite disliking home) and a specific literary technique (contrast between external improvement and internal feelings) that will be analyzed in the essay.</p>
+                        </div>
+                        
+                        <div class="improvement-section">
+                            <h5>Improvement suggestions:</h5>
+                            <ul><li>Consider mentioning additional literary elements beyond contrast that will be analyzed (the prompt asks for multiple elements and techniques)</li><li>The thesis could be more specific about what aspects of homesickness create the complexity in the narrator's situation</li><li>Add more nuance to acknowledge that the narrator's feelings aren't simply binary (improvement vs. homesickness) but contain multiple layers of complexity</li></ul>
+                        </div>
+                    </div>
+                    
+                    <div class="criteria-section">
+                        <div class="criteria-header">
+                            <h4>Evidence & Reasoning</h4>
+                            <div class="criteria-score full-score">Score: 4/4</div>
+                        </div>
+                        
+                        <div class="comment-section">
+                            <p><em>Commentary:</em></p>
+                            <p>This response earns 4 points for evidence and commentary. The essay provides specific textual evidence from the passage and effectively explains how this evidence supports the thesis about homesickness despite improved circumstances. Most importantly, the student effectively analyzes multiple literary elements and techniques: diction and syntax in paragraph 2, and simile and imagery in paragraph 3. The analysis of diction shows how Kincaid's use of simple language like 'was such a good idea' and fragmentary sentence structure creates 'a sense of child-like wonder' that reveals both the narrator's background and emotional response. The analysis of simile effectively explains how the image of water 'dividing formerly dry and solid ground' represents the profound internal division the narrator experiences between past and future. The essay also connects these literary techniques to the overall meaning, showing how they reveal the paradox of longing for a place the narrator previously wanted to escape. The commentary consistently links the evidence to the line of reasoning throughout the essay, demonstrating how these techniques portray the complexity of the narrator's situation.</p>
+                        </div>
+                        
+                        <div class="improvement-section">
+                            <h5>Improvement suggestions:</h5>
+                            <ul><li>Strengthen the analysis by more directly addressing how these literary elements specifically reveal the 'complexity' mentioned in the prompt, not just homesickness.</li><li>Expand the analysis of syntax in paragraph 2 by examining how specific sentence structures (beyond just fragments) contribute to the portrayal of the narrator's experience.</li><li>Develop a more detailed explanation of how the imagery in paragraph 3 works—specifically analyze the contrasting descriptions of the two 'banks' and what they symbolize about the narrator's past and future.</li><li>Consider analyzing additional literary elements present in the passage, such as the contrast between external circumstances and internal feelings, or the significance of the dream in the final paragraph.</li><li>Connect the analysis of different literary elements more explicitly to show how they work together to create a cohesive portrayal of the narrator's complex situation rather than analyzing them in isolation.</li></ul>
+                        </div>
+                    </div>
+                    
+                    <div class="criteria-section">
+                        <div class="criteria-header">
+                            <h4>Sophistication</h4>
+                            <div class="criteria-score zero-score">Score: 0/1</div>
+                        </div>
+                        
+                        <div class="comment-section">
+                            <p><em>Commentary:</em></p>
+                            <p>The essay shows some understanding of literary techniques in Kincaid's passage but lacks the sophistication necessary for the highest level of analysis. While the student identifies relevant literary elements (diction, syntax, simile, imagery) and attempts to connect them to theme, the essay doesn't fully develop a complex understanding of the narrator's situation or experience. The analysis remains somewhat surface-level, particularly when addressing the psychological complexity of the narrator's response to her new environment.</p><p>The third paragraph shows the most potential for sophisticated analysis when discussing the 'juxtaposition of a clear hatred for her home and love for her new home, with a deep longing to be back where she is from,' but this promising observation isn't developed with the analytical depth required. The essay doesn't fully explore the cultural, psychological, or emotional complexities of displacement, immigration, and the narrator's conflicted feelings about both her past and future.</p><p>The concluding metaphor comparing homesickness to 'an astronaut miss[ing] oxygen in space' introduces an interesting comparison but arrives too late in the essay to be developed into a sophisticated analysis of the narrator's experience.</p>
+                        </div>
+                        
+                        <div class="improvement-section">
+                            <h5>Improvement suggestions:</h5>
+                            <ul><li>Develop a more nuanced understanding of the narrator's complex relationship with her homeland by analyzing how Kincaid's imagery reveals both resentment and attachment simultaneously</li><li>Explore how the narrative voice shifts between detachment and emotional connection throughout the passage, revealing the narrator's psychological struggle with her new identity</li><li>Analyze how Kincaid uses contrasting sensory details (temperature, light, food) to represent the cultural and emotional displacement the narrator experiences</li><li>Consider how the dream sequence at the end complicates the narrator's stated feelings about her homeland</li><li>Situate this passage within broader contexts of postcolonial literature, immigrant experiences, or coming-of-age narratives to demonstrate understanding of its literary significance</li><li>Develop more thorough analysis of how specific literary techniques (like the water/bank metaphor) reveal both external circumstances and internal psychological states</li></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Question 3 -->
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Question 3 - 'Literary Argument'</h2>
+                <div class="score-badge">
+                    <span>Score: 4</span>
+                </div>
+            </div>
+            <div class="question-body">
+                <div class="summary-section">
+                    <h3>Summary</h3>
+                    <p>The essay presents a solid thesis about Lena Younger's judgment to prioritize homeownership over fear, but needs to better articulate how this reveals character complexity and contributes to the play's interpretation beyond being 'an example' of the Black American Dream. While providing some relevant evidence, the essay requires stronger connections between textual examples and claims, particularly regarding Lena's religious values and courage. Most critically, the analysis lacks sophistication in exploring the play's nuanced critique of racial inequality, failing to examine the historical context of segregation and the complexities of how the American Dream functions differently for Black Americans in the 1950s.</p>
+                </div>
+                
+                <button class="breakdown-toggle" aria-expanded="false" aria-controls="q3-breakdown">
+                    View Detailed Breakdown
+                    <span class="icon">▼</span>
+                </button>
+                
+                <div id="q3-breakdown" class="breakdown-content">
+                    <div class="criteria-section">
+                        <div class="criteria-header">
+                            <h4>Thesis</h4>
+                            <div class="criteria-score full-score">Score: 1/1</div>
+                        </div>
+                        
+                        <div class="comment-section">
+                            <p><em>Commentary:</em></p>
+                            <p>The thesis statement in the first paragraph reads: "In the play, A Raisin in the Sun, Lena Younger makes the judgment that living in the house in Clybourne Park is more important than the fear of violence against her family or the fear of financial challenges that will come with the property, revealing her attachment to the dream she and Big Walter had, and contributing to the work being an example of the black person's lived experience of the American dream." This thesis directly responds to the prompt by identifying a character (Lena Younger) who makes a judgment that something else (living in the house in Clybourne Park) is more important than fear. It also addresses how this judgment reveals the character's dreams and values, and contributes to an interpretation of the work as a whole by positioning the play as exploring the black experience of the American dream.</p>
+                        </div>
+                        
+                        <div class="improvement-section">
+                            <h5>Improvement suggestions:</h5>
+                            <ul><li>The thesis could be strengthened by being more specific about how Lena's judgment reveals 'complexity' as mentioned in the prompt</li><li>Consider articulating more clearly how Lena's decision contributes to a particular interpretation beyond being 'an example' of the black person's lived experience</li><li>The thesis could benefit from more precise language about what specific values of Lena's are revealed through her judgment</li></ul>
+                        </div>
+                    </div>
+                    
+                    <div class="criteria-section">
+                        <div class="criteria-header">
+                            <h4>Evidence & Reasoning</h4>
+                            <div class="criteria-score partial-score">Score: 3/4</div>
+                        </div>
+                        
+                        <div class="comment-section">
+                            <p><em>Commentary:</em></p>
+                            <p>The essay establishes a line of reasoning about how Lena Younger's judgment to prioritize homeownership over fear reveals her attachment to the American dream. It provides specific evidence such as 'reports of bombings of black families in Clybourne Park,' 'Mr. Lindner attempt to persuade the family to sell the house,' and Lena 'hitting Beneatha for saying God doesn't exist.' The essay explains how some evidence supports the line of reasoning, particularly in paragraph 2 where it connects Lena's decision to her values: 'For Lena, giving up on this home would be giving up on the American dream.' The essay generally maintains focus on the central argument about Lena's decision and its relationship to the American dream. However, it doesn't consistently explain how all evidence supports this reasoning. For example, the commentary about America's Christian foundations and the Pledge of Allegiance is not clearly connected to Lena's specific decision-making process. Similarly, in paragraph 4, the claims about differences between Black and white experiences of the American dream could be more explicitly tied to textual evidence from the play.</p>
+                        </div>
+                        
+                        <div class="improvement-section">
+                            <h5>Improvement suggestions:</h5>
+                            <ul><li>Provide more specific textual evidence about how Lena demonstrates courage in facing potential violence and financial challenges after Walter loses the money</li><li>Develop clearer connections between Lena's religious values and her decision about the house—how specifically does her faith give her 'confidence to be able to reject fear'?</li><li>When discussing how the American dream differs for Black Americans who are 'actively oppressed,' include specific examples from the play that illustrate this oppression</li><li>Include more context about Big Walter and his specific dreams to strengthen claims about their 'shared dream'</li><li>Explain more explicitly how Lena's decision contributes to the broader interpretation of the work as a commentary on 'the black person's lived experience of the American dream'</li><li>Connect the conclusion more specifically to textual evidence rather than making broad claims about how the play 'brings together communities'</li></ul>
+                        </div>
+                    </div>
+                    
+                    <div class="criteria-section">
+                        <div class="criteria-header">
+                            <h4>Sophistication</h4>
+                            <div class="criteria-score zero-score">Score: 0/1</div>
+                        </div>
+                        
+                        <div class="comment-section">
+                            <p><em>Commentary:</em></p>
+                            <p>This essay demonstrates basic understanding of Lena Younger's character and her decision to move to Clybourne Park despite fears, but lacks the sophistication needed for the higher score. While the essay correctly identifies the American Dream as a theme and establishes some connection between Lena's decision and her values, it offers oversimplified interpretations without exploring the complexities of race, class, and discrimination central to Hansberry's play. The essay asserts that 'A Raisin in the Sun is able to bring together communities, despite their differences,' but doesn't engage with the play's nuanced critique of racial inequality in America. References to America being 'founded under Christian values' and statements like 'Regardless of race, we all have a dream' demonstrate a tendency toward generalization rather than sophisticated literary analysis. The essay makes observations about Lena's faith and attachment to the American Dream but doesn't thoroughly analyze how these elements contribute to Hansberry's complex exploration of racial injustice, intergenerational conflict, or the paradoxical nature of the American Dream for Black Americans in the 1950s.</p>
+                        </div>
+                        
+                        <div class="improvement-section">
+                            <h5>Improvement suggestions:</h5>
+                            <ul><li>Develop a more nuanced analysis of how the American Dream functions specifically for Black Americans in the historical context of segregation and housing discrimination</li><li>Explore the tensions and contradictions in Lena's decision - how it represents both courage and potential danger, tradition and progress</li><li>Analyze how Lena's judgment relates to other characters' development, particularly Walter Lee's transformation and the different generational perspectives on achieving dignity</li><li>Incorporate more specific textual evidence and analyze Hansberry's literary techniques (symbolism, dialogue, stage directions) that develop themes of courage versus fear</li><li>Consider the play's critical perspective on American society rather than simply presenting it as a universally affirming story of achieving dreams</li><li>Analyze how Lena's religious values both strengthen her and potentially create conflict with younger characters like Beneatha</li><li>Explore how Hansberry complicates notions of home, belonging, and identity through Lena's decision</li></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
